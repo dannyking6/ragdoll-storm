@@ -47,15 +47,15 @@
   // The Unity framework resolves the SDK through the window global; the
   // jslib glue also calls window.commercialBreak / window.rewardedBreak /
   // window.shareableURL directly. All are served by the same local shim.
-  window.PokiSDK = window.PokiSDK || localSDK;
-  for (var k in localSDK) { if (!(k in window.PokiSDK)) window.PokiSDK[k] = localSDK[k]; }
-  window.LokiSDK = window.PokiSDK;
-  window.GameDriver = window.PokiSDK;
+  window.SDK = window.SDK || localSDK;
+  for (var k in localSDK) { if (!(k in window.SDK)) window.SDK[k] = localSDK[k]; }
+  window.LokiSDK = window.SDK;
+  window.GameDriver = window.SDK;
 
   // --- Engine-facing bridge -------------------------------------------------
   // The build calls these globals from jslib glue; results are delivered back
   // to the engine GameObject via SendMessage. The object name arrives via
-  // initPokiBridge (the glue passes it before any break is requested).
+  // initBridge (the glue passes it before any break is requested).
   var bridgeObj = null;
 
   function send(method, param) {
@@ -67,7 +67,7 @@
   window.initLokiBridge = function (name) {
     bridgeObj = name;
     // Engine may already be past init; confirm the bridge either way.
-    send('OnPokiBridgeReady', '');
+    send('OnSDKBridgeReady', '');
   };
 
   window.commercialBreak = function () {
